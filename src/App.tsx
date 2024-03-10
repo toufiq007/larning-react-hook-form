@@ -1,12 +1,14 @@
 import "./App.css";
-import PracticeYoutubeForm from "./components/PracticeYourtubeFrom";
+import BasicForm from "./components/BasicForm";
+// import PracticeYoutubeForm from "./components/PracticeYourtubeFrom";
 // import YoutubeFrom from "./components/YoutubeFrom";
 
 function App() {
   return (
     <>
       {/* <YoutubeFrom /> */}
-      <PracticeYoutubeForm />
+      {/* <PracticeYoutubeForm /> */}
+      <BasicForm/>
     </>
   );
 }
