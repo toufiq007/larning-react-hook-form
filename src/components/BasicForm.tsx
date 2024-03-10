@@ -47,9 +47,23 @@ const BasicForm = () => {
                   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
                 message: "Invalid Email Format",
               },
+              validate: {
+                notAdmin: (fieldValue) => {
+                  return (
+                    fieldValue !== "admin@gmail.com" ||
+                    "Enter a different email address"
+                  );
+                },
+                notBlackListedDomain: (fieldValue) => {
+                  return (
+                    !fieldValue.endsWith("baddomain.com") ||
+                    "This domain is not supported"
+                  );
+                },
+              },
             })}
           />
-          {errors.email && <p>{errors.email?.message}</p>}
+          {errors.email && <Error message={errors.email?.message} />}
         </div>
         <div>
           <label htmlFor="channel">Channel</label>
@@ -64,7 +78,7 @@ const BasicForm = () => {
               },
             })}
           />
-          {errors.email && <p>{errors.channel?.message}</p>}
+          {errors.channel && <Error message={errors.channel.message} />}
         </div>
         <button type="submit">Submit</button>
       </form>

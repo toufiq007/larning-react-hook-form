@@ -1,12 +1,9 @@
-
 type ErrorType = {
-    message:string | undefined
-}
+  message: string | undefined;
+};
 
-const Error = ({message}:ErrorType) => {
-    return (
-        <p>{message}</p>
-    );
+const Error = ({ message }: ErrorType) => {
+  return <p style={{ color: "red",fontSize:"12px" }}>{message}</p>;
 };
 
 export default Error;
