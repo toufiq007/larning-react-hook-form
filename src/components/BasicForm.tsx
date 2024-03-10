@@ -12,34 +12,36 @@ type FormValues = {
     facebook: string;
     twitter: string;
   };
+  phoneNumber: string[];
 };
 
 const BasicForm = () => {
   const { register, control, handleSubmit, formState } = useForm<FormValues>({
     // setting default vlaues for synchorous value
     // setting default vlaues for synchorous value
-    // defaultValues: {
-    //   username: "limon",
-    //   email: "limon@gmail.com",
-    //   channel: "web_dev",
-    // },
+    defaultValues: {
+      username: "limon",
+      email: "limon@gmail.com",
+      channel: "web_dev",
+    },
 
     // setting default vlaues for async value from the api
-    defaultValues: async () => {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/users/1`
-      );
-      const data = await response.json();
-      return {
-        username: data?.name,
-        email: data?.email,
-        channel: "",
-        social_link: {
-          facebook: "",
-          twitter: "",
-        },
-      };
-    },
+    // defaultValues: async () => {
+    //   const response = await fetch(
+    //     `https://jsonplaceholder.typicode.com/users/1`
+    //   );
+    //   const data = await response.json();
+    //   return {
+    //     username: data?.name,
+    //     email: data?.email,
+    //     channel: "",
+    //     social_link: {
+    //       facebook: "",
+    //       twitter: "",
+    //     },
+    //     phoneNumber: ['','']
+    //   };
+    // },
   });
   const { errors } = formState;
   const handleOnSubmit = (data: FormValues) => {
@@ -142,6 +144,41 @@ const BasicForm = () => {
           />
           {errors.social_link?.twitter && (
             <Error message={errors.social_link.twitter.message} />
+          )}
+        </div>
+
+        <div>
+          <label htmlFor="primaryPhone">Primary Phone Number</label>
+          <input
+            type="text"
+            id="primaryPhone"
+            placeholder="Primary Phone"
+            {...register("phoneNumber.0", {
+              required: {
+                value: true,
+                message: "Primary phone is required",
+              },
+            })}
+          />
+          {errors.phoneNumber && (
+            <Error message={errors.phoneNumber[0]?.message} />
+          )}
+        </div>
+        <div>
+          <label htmlFor="secondaryPhone">Secondary Phone</label>
+          <input
+            type="text"
+            id="secondaryPhone"
+            placeholder="secondary Phone"
+            {...register("phoneNumber.1", {
+              required: {
+                value: true,
+                message: "secondary phone is requried",
+              },
+            })}
+          />
+          {errors.phoneNumber && (
+            <Error message={errors.phoneNumber[1]?.message} />
           )}
         </div>
 
