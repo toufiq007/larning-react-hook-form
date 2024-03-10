@@ -8,10 +8,39 @@ type FormValues = {
   username: string;
   email: string;
   channel: string;
+  social_link: {
+    facebook: string;
+    twitter: string;
+  };
 };
 
 const BasicForm = () => {
-  const { register, control, handleSubmit, formState } = useForm<FormValues>();
+  const { register, control, handleSubmit, formState } = useForm<FormValues>({
+    // setting default vlaues for synchorous value
+    // setting default vlaues for synchorous value
+    // defaultValues: {
+    //   username: "limon",
+    //   email: "limon@gmail.com",
+    //   channel: "web_dev",
+    // },
+
+    // setting default vlaues for async value from the api
+    defaultValues: async () => {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/users/1`
+      );
+      const data = await response.json();
+      return {
+        username: data?.name,
+        email: data?.email,
+        channel: "",
+        social_link: {
+          facebook: "",
+          twitter: "",
+        },
+      };
+    },
+  });
   const { errors } = formState;
   const handleOnSubmit = (data: FormValues) => {
     console.log("form submitted", data);
@@ -80,6 +109,42 @@ const BasicForm = () => {
           />
           {errors.channel && <Error message={errors.channel.message} />}
         </div>
+
+        <div>
+          <label htmlFor="facebook">Facebook</label>
+          <input
+            type="text"
+            id="facebook"
+            placeholder="facebook"
+            {...register("social_link.facebook", {
+              required: {
+                value: true,
+                message: "facebook link is required",
+              },
+            })}
+          />
+          {errors.social_link?.facebook && (
+            <Error message={errors.social_link.facebook.message} />
+          )}
+        </div>
+        <div>
+          <label htmlFor="twitter">Twitter</label>
+          <input
+            type="text"
+            id="twitter"
+            placeholder="twitter"
+            {...register("social_link.twitter", {
+              required: {
+                value: true,
+                message: "Twitter link is required",
+              },
+            })}
+          />
+          {errors.social_link?.twitter && (
+            <Error message={errors.social_link.twitter.message} />
+          )}
+        </div>
+
         <button type="submit">Submit</button>
       </form>
       <DevTool control={control} />
