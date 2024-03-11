@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DevTool } from "@hookform/devtools";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import Error from "./Error";
 
 type FormValues = {
@@ -13,6 +13,9 @@ type FormValues = {
     twitter: string;
   };
   phoneNumber: string[];
+  phNumbers: {
+    number: string;
+  }[];
 };
 
 const BasicForm = () => {
@@ -23,6 +26,7 @@ const BasicForm = () => {
       username: "limon",
       email: "limon@gmail.com",
       channel: "web_dev",
+      phNumbers: [{ number: "" }],
     },
 
     // setting default vlaues for async value from the api
@@ -44,6 +48,10 @@ const BasicForm = () => {
     // },
   });
   const { errors } = formState;
+  const { fields, append, remove } = useFieldArray({
+    name: "phNumbers",
+    control,
+  });
   const handleOnSubmit = (data: FormValues) => {
     console.log("form submitted", data);
   };
@@ -180,6 +188,29 @@ const BasicForm = () => {
           {errors.phoneNumber && (
             <Error message={errors.phoneNumber[1]?.message} />
           )}
+        </div>
+        <div>
+          <label htmlFor="">List of phone numbers</label>
+          <div>
+            {fields.map((field, index) => {
+              return (
+                <div key={field.id}>
+                  <input
+                    type="text"
+                    {...register(`phNumbers.${index}.number` as const)}
+                  />
+                  {index > 0 && (
+                    <button type="button" onClick={() => remove(index)}>
+                      Remove
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+            <button type="button" onClick={() => append({ number: "" })}>
+              Add Phone number
+            </button>
+          </div>
         </div>
 
         <button type="submit">Submit</button>
