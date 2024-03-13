@@ -16,6 +16,8 @@ type FormValues = {
   phNumbers: {
     number: string;
   }[];
+  age: number;
+  dateOfBirth: Date;
 };
 
 const BasicForm = () => {
@@ -27,6 +29,8 @@ const BasicForm = () => {
       email: "limon@gmail.com",
       channel: "web_dev",
       phNumbers: [{ number: "" }],
+      age: 0,
+      dateOfBirth: new Date(),
     },
 
     // setting default vlaues for async value from the api
@@ -211,6 +215,38 @@ const BasicForm = () => {
               Add Phone number
             </button>
           </div>
+        </div>
+        <div>
+          <label htmlFor="age">Age</label>
+          <input
+            type="number"
+            id="age"
+            placeholder="age"
+            {...register("age", {
+              valueAsNumber: true,
+              required: {
+                value: true,
+                message: "age is required",
+              },
+            })}
+          />
+          {errors.age && <Error message={errors.age.message} />}
+        </div>
+        <div>
+          <label htmlFor="dob">Date Of Birth</label>
+          <input
+            type="date"
+            id="dob"
+            placeholder="date of birth"
+            {...register("dateOfBirth", {
+              valueAsDate:true,
+              required: {
+                value: true,
+                message: "Date of birth is required",
+              },
+            })}
+          />
+          {errors.dateOfBirth && <Error message={errors.dateOfBirth.message} />}
         </div>
 
         <button type="submit">Submit</button>
