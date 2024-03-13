@@ -3,7 +3,9 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, useFieldArray } from "react-hook-form";
 import Error from "./Error";
+import { useEffect } from "react";
 
+let incrementValue = 0;
 type FormValues = {
   username: string;
   email: string;
@@ -21,36 +23,38 @@ type FormValues = {
 };
 
 const BasicForm = () => {
-  const { register, control, handleSubmit, formState } = useForm<FormValues>({
-    // setting default vlaues for synchorous value
-    // setting default vlaues for synchorous value
-    defaultValues: {
-      username: "limon",
-      email: "limon@gmail.com",
-      channel: "web_dev",
-      phNumbers: [{ number: "" }],
-      age: 0,
-      dateOfBirth: new Date(),
-    },
+  incrementValue++;
+  const { register, control, handleSubmit, formState, watch } =
+    useForm<FormValues>({
+      // setting default vlaues for synchorous value
+      // setting default vlaues for synchorous value
+      defaultValues: {
+        username: "limon",
+        email: "limon@gmail.com",
+        channel: "web_dev",
+        phNumbers: [{ number: "" }],
+        age: 0,
+        dateOfBirth: new Date(),
+      },
 
-    // setting default vlaues for async value from the api
-    // defaultValues: async () => {
-    //   const response = await fetch(
-    //     `https://jsonplaceholder.typicode.com/users/1`
-    //   );
-    //   const data = await response.json();
-    //   return {
-    //     username: data?.name,
-    //     email: data?.email,
-    //     channel: "",
-    //     social_link: {
-    //       facebook: "",
-    //       twitter: "",
-    //     },
-    //     phoneNumber: ['','']
-    //   };
-    // },
-  });
+      // setting default vlaues for async value from the api
+      // defaultValues: async () => {
+      //   const response = await fetch(
+      //     `https://jsonplaceholder.typicode.com/users/1`
+      //   );
+      //   const data = await response.json();
+      //   return {
+      //     username: data?.name,
+      //     email: data?.email,
+      //     channel: "",
+      //     social_link: {
+      //       facebook: "",
+      //       twitter: "",
+      //     },
+      //     phoneNumber: ['','']
+      //   };
+      // },
+    });
   const { errors } = formState;
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -59,10 +63,22 @@ const BasicForm = () => {
   const handleOnSubmit = (data: FormValues) => {
     console.log("form submitted", data);
   };
+  // const watchedValue = watch("username");
+  // const watchForm = watch();
+  // unsubscribe watch method
+  useEffect(() => {
+    const subscribe = watch((value) => {
+      console.log(value);
+    });
+    return ()=>{
+      subscribe.unsubscribe()
+    }
+  }, [watch]);
   return (
     <div>
-      <h2>Basic Form</h2>
+      <h2>Basic Form ({incrementValue})</h2>
       <form onSubmit={handleSubmit(handleOnSubmit)} noValidate>
+        <h3>watchedValue {}</h3>
         <div>
           <label htmlFor="username">Username</label>
           <input
@@ -239,7 +255,7 @@ const BasicForm = () => {
             id="dob"
             placeholder="date of birth"
             {...register("dateOfBirth", {
-              valueAsDate:true,
+              valueAsDate: true,
               required: {
                 value: true,
                 message: "Date of birth is required",
