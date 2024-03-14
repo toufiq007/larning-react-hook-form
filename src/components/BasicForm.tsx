@@ -24,37 +24,44 @@ type FormValues = {
 
 const BasicForm = () => {
   incrementValue++;
-  const { register, control, handleSubmit, formState, watch } =
-    useForm<FormValues>({
-      // setting default vlaues for synchorous value
-      // setting default vlaues for synchorous value
-      defaultValues: {
-        username: "limon",
-        email: "limon@gmail.com",
-        channel: "web_dev",
-        phNumbers: [{ number: "" }],
-        age: 0,
-        dateOfBirth: new Date(),
-      },
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState,
+    watch,
+    getValues,
+    setValue,
+  } = useForm<FormValues>({
+    // setting default vlaues for synchorous value
+    // setting default vlaues for synchorous value
+    defaultValues: {
+      username: "limon",
+      email: "limon@gmail.com",
+      channel: "web_dev",
+      phNumbers: [{ number: "" }],
+      age: 0,
+      dateOfBirth: new Date(),
+    },
 
-      // setting default vlaues for async value from the api
-      // defaultValues: async () => {
-      //   const response = await fetch(
-      //     `https://jsonplaceholder.typicode.com/users/1`
-      //   );
-      //   const data = await response.json();
-      //   return {
-      //     username: data?.name,
-      //     email: data?.email,
-      //     channel: "",
-      //     social_link: {
-      //       facebook: "",
-      //       twitter: "",
-      //     },
-      //     phoneNumber: ['','']
-      //   };
-      // },
-    });
+    // setting default vlaues for async value from the api
+    // defaultValues: async () => {
+    //   const response = await fetch(
+    //     `https://jsonplaceholder.typicode.com/users/1`
+    //   );
+    //   const data = await response.json();
+    //   return {
+    //     username: data?.name,
+    //     email: data?.email,
+    //     channel: "",
+    //     social_link: {
+    //       facebook: "",
+    //       twitter: "",
+    //     },
+    //     phoneNumber: ['','']
+    //   };
+    // },
+  });
   const { errors } = formState;
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
@@ -66,14 +73,24 @@ const BasicForm = () => {
   // const watchedValue = watch("username");
   // const watchForm = watch();
   // unsubscribe watch method
-  useEffect(() => {
-    const subscribe = watch((value) => {
-      console.log(value);
+  // useEffect(() => {
+  //   const subscribe = watch((value) => {
+  //     console.log(value);
+  //   });
+  //   return () => {
+  //     subscribe.unsubscribe();
+  //   };
+  // }, []);
+  const handleGetValues = () => {
+    console.log("Get values", getValues());
+  };
+  const handleSetValue = () => {
+    setValue("username", "", {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true,
     });
-    return ()=>{
-      subscribe.unsubscribe()
-    }
-  }, [watch]);
+  };
   return (
     <div>
       <h2>Basic Form ({incrementValue})</h2>
@@ -266,6 +283,12 @@ const BasicForm = () => {
         </div>
 
         <button type="submit">Submit</button>
+        <button onClick={handleGetValues} type="button">
+          GetValues
+        </button>
+        <button onClick={handleSetValue} type="button">
+          Set Value
+        </button>
       </form>
       <DevTool control={control} />
     </div>
