@@ -39,6 +39,7 @@ const BasicForm = () => {
       isSubmitSuccessful,
       submitCount,
     },
+    reset,
     watch,
     getValues,
     setValue,
@@ -107,6 +108,11 @@ const BasicForm = () => {
       shouldValidate: true,
     });
   };
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset(); // for reset all field value
+    }
+  }, [isSubmitSuccessful, reset]);
   return (
     <div>
       <h2>Basic Form ({incrementValue})</h2>
