@@ -28,7 +28,7 @@ const BasicForm = () => {
     register,
     control,
     handleSubmit,
-    formState,
+    formState: { touchedFields, dirtyFields, errors, isDirty },
     watch,
     getValues,
     setValue,
@@ -62,7 +62,7 @@ const BasicForm = () => {
     //   };
     // },
   });
-  const { errors } = formState;
+  // const { errors } = formState;
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
     control,
@@ -70,6 +70,7 @@ const BasicForm = () => {
   const handleOnSubmit = (data: FormValues) => {
     console.log("form submitted", data);
   };
+  console.log(isDirty);
   // const watchedValue = watch("username");
   // const watchForm = watch();
   // unsubscribe watch method
@@ -82,7 +83,8 @@ const BasicForm = () => {
   //   };
   // }, []);
   const handleGetValues = () => {
-    console.log("Get values", getValues());
+    // console.log("Get values", getValues(["username", "channel"])); // we can pass this to get specific filed
+    console.log("Get values", getValues()); // we can pass this to get all form field
   };
   const handleSetValue = () => {
     setValue("username", "", {
