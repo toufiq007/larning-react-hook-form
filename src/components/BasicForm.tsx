@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { DevTool } from "@hookform/devtools";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FieldErrors } from "react-hook-form";
 import Error from "./Error";
 import { useEffect } from "react";
 
@@ -70,6 +70,9 @@ const BasicForm = () => {
   const handleOnSubmit = (data: FormValues) => {
     console.log("form submitted", data);
   };
+  const handleOnError = (errors: FieldErrors<FormValues>) => {
+    console.log(errors);
+  };
   console.log(isDirty);
   // const watchedValue = watch("username");
   // const watchForm = watch();
@@ -96,7 +99,7 @@ const BasicForm = () => {
   return (
     <div>
       <h2>Basic Form ({incrementValue})</h2>
-      <form onSubmit={handleSubmit(handleOnSubmit)} noValidate>
+      <form onSubmit={handleSubmit(handleOnSubmit, handleOnError)} noValidate>
         <h3>watchedValue {}</h3>
         <div>
           <label htmlFor="username">Username</label>
