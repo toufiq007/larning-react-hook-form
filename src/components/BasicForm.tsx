@@ -28,7 +28,7 @@ const BasicForm = () => {
     register,
     control,
     handleSubmit,
-    formState: { touchedFields, dirtyFields, errors, isDirty },
+    formState: { touchedFields, dirtyFields, errors, isDirty, isValid },
     watch,
     getValues,
     setValue,
@@ -73,7 +73,7 @@ const BasicForm = () => {
   const handleOnError = (errors: FieldErrors<FormValues>) => {
     console.log(errors);
   };
-  console.log(isDirty);
+  console.log(isDirty, isValid);
   // const watchedValue = watch("username");
   // const watchForm = watch();
   // unsubscribe watch method
@@ -286,8 +286,10 @@ const BasicForm = () => {
           />
           {errors.dateOfBirth && <Error message={errors.dateOfBirth.message} />}
         </div>
-
-        <button type="submit">Submit</button>
+        {/* it means submit button should be disabled when form is not valid or any field shouldnot not properly filled */}
+        <button type="submit" disabled={!isDirty || !isValid}>
+          Submit
+        </button>
         <button onClick={handleGetValues} type="button">
           GetValues
         </button>
