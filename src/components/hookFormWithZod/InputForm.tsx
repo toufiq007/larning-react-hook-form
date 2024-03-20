@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
 
-type InputFormType = {
-  email: string;
-  password: string;
-};
+const schema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+type FormField = z.infer<typeof schema>;
+
 const InputForm = () => {
   const {
     register,
@@ -13,12 +18,13 @@ const InputForm = () => {
     reset,
     setError,
     formState: { isSubmitSuccessful, errors, isSubmitting },
-  } = useForm<InputFormType>();
-  // const onSubmit: SubmitHandler<InputFormType> = async (data: any) => {
-  //   await new Promise((resolve) => setTimeout(resolve, 2000));
-  //   console.log(data);
-  // };
-  const onSubmit: SubmitHandler<InputFormType> = async (data: any) => {
+  } = useForm<FormField>({
+    defaultValues: {
+      email: "user@gmail.com",
+    },
+    resolver: zodResolver(schema),
+  });
+  const onSubmit: SubmitHandler<FormField> = async (data: any) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log(data);
@@ -40,23 +46,7 @@ const InputForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="inputContainer">
           <label htmlFor="">Email</label>
-          <input
-            type="text"
-            placeholder="enter email"
-            {...register("email", {
-              //   required: {
-              //     value: true,
-              //     message: "this field is required!!",
-              //   },
-              required: "this field is required",
-              validate: (value) => {
-                if (!value.includes("@")) {
-                  return "email must include @";
-                }
-                return true;
-              },
-            })}
-          />
+          <input type="text" placeholder="enter email" {...register("email")} />
           {errors.email?.message && (
             <p style={{ color: "red" }}>{errors.email.message}</p>
           )}
@@ -68,16 +58,7 @@ const InputForm = () => {
             style={{ fontSize: "17px", width: "420px", padding: "5px" }}
             type="password"
             placeholder="enter password"
-            {...register("password", {
-              required: {
-                value: true,
-                message: "this field is requried",
-              },
-              minLength: {
-                value: 8,
-                message: "password must be greater than 8",
-              },
-            })}
+            {...register("password")}
           />
           {errors.password?.message && (
             <p style={{ color: "red" }}>{errors.password.message}</p>
