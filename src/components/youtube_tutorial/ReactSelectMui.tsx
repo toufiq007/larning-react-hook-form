@@ -2,6 +2,7 @@
 import { Autocomplete, MenuItem, Select, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import BasicSelect from "./Select";
 
 type FormValues = {
   firstName: string;
@@ -65,7 +66,7 @@ const ReactMuiSelect = () => {
   const [value, setValue] = useState<string | null>(null);
   const [skills, setSkills] = useState<skill | null>(null);
 
-  console.log({ value });
+  // console.log({ value });
 
   useEffect(() => {
     fetch(`https://restcountries.com/v3.1/all`)
@@ -112,23 +113,12 @@ const ReactMuiSelect = () => {
             defaultValue=""
             render={({ field }) => (
               <>
-                <Select
-                  style={{ width: "400px" }}
-                  labelId="gender"
+                <BasicSelect
                   id="gender"
-                  size="small"
-                  {...field}
-                  displayEmpty
-                >
-                  <MenuItem value="" disabled>
-                    Select gender
-                  </MenuItem>
-                  {genderList.map((gender) => (
-                    <MenuItem key={gender.id} value={gender.value}>
-                      {gender.value}
-                    </MenuItem>
-                  ))}
-                </Select>
+                  field={field}
+                  options={genderList}
+                  placeholder={"Select Gender"}
+                />
               </>
             )}
           />
@@ -140,6 +130,7 @@ const ReactMuiSelect = () => {
             defaultValue=""
             control={control}
             render={({ field }) => (
+              // <BasicSelect id="country" field={field} options={country} placeholder={"Select Country"} />
               <Select
                 {...field}
                 labelId="country"
